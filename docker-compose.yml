@@ -7,11 +7,10 @@ services:
       - "3000:3000"
     volumes:
       - .:/usr/src/app
+      - /usr/src/app/node_modules
     links:
       - mongo
   mongo:
     image: mongo:3.4
     ports:
       - "27017:27017"
-    volumes:
-      - ./test/data/mongo_import:/testdata
