@@ -1,7 +1,10 @@
 # movie-recommendation-backend
 
 ## up
-`docker-compose up --build -d`
+`docker-compose up --build`
+
+## start
+`docker-compose run --rm --service-ports movie-rec`
 
 ## down
 `docker-compose down`
