@@ -7,5 +7,5 @@ COPY package.json /usr/src/app/
 RUN npm install && npm cache clean
 COPY . /usr/src/app
 
-ENTRYPOINT npm
-CMD start
+ENTRYPOINT ["npm"]
+CMD ["start"]
