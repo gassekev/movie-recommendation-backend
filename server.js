@@ -11,14 +11,14 @@ app.use(cors());
 app.use(jsonBodyParser());
 
 app.get('/', (req, res) => {
-  const recommendedMovies = ['Die Hard', 'Two Girls One Cup', 'Crank', 'JS: A Hate Story'];
+  const recommendedMovies = ['Die Hard 4.0', 'Fast 10: your seatbelts', 'Crank', 'JS: A Hate Story'];
   res.json(recommendedMovies);
 });
 
 app.post('/', (req, res) => {
   const MongoClient = mongodb.MongoClient;
-  MongoClient.connect('mongodb://mongo:27017/userDb', (err, db) => {
-    const collection = db.collection('username');
+  MongoClient.connect('mongodb://mongo:27017/movierec', (err, db) => {
+    const collection = db.collection('watchedmovies');
     collection.insert(req.body);
     res.sendStatus(httpStatus.OK);
   });
