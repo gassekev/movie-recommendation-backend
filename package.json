@@ -2,9 +2,9 @@
   "name": "movie-recommendation-backend",
   "version": "1.1.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
-    "test": "make test"
+    "start": "babel-node server.js"
   },
   "repository": {
     "type": "git",
@@ -18,5 +18,13 @@
   "bugs": {
     "url": "https://github.com/gassekev/movie-recommendation-backend/issues"
   },
-  "homepage": "https://github.com/gassekev/movie-recommendation-backend#readme"
+  "homepage": "https://github.com/gassekev/movie-recommendation-backend#readme",
+  "dependencies": {
+    "mongodb": "^2.2.31"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.6.0",
+    "babel-preset-stage-3": "^6.24.1"
+  }
 }
