@@ -1,0 +1,22 @@
+{
+  "name": "movie-recommendation-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "make test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gassekev/movie-recommendation-backend.git"
+  },
+  "keywords": [
+    "npm"
+  ],
+  "author": "cias",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gassekev/movie-recommendation-backend/issues"
+  },
+  "homepage": "https://github.com/gassekev/movie-recommendation-backend#readme"
+}
