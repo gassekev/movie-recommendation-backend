@@ -11,22 +11,25 @@ let db = null;
 app.use(cors());
 app.use(jsonBodyParser());
 
-app.get('/', (req, res) => {
-  const recommendedMovies = ['Die Hard 4.0', 'Fast 10: your seatbelts', 'Crank', 'JS: A Hate Story'];
+app.get('/recommendations', (req, res) => {
+  const recommendedMovies = ['Die Hard 4.0', 'Fast 10: your seatbelts',
+    'Crank', 'JS: A Hate Story'];
   res.json(recommendedMovies);
 });
 
-app.post('/', (req, res) => {
+app.post('/watchedmovie', (req, res) => {
   const collection = db.collection('watchedmovies');
   collection.insert(req.body)
     // TODO: Remove test output
     .then(() => collection.find().toArray())
+    // TODO Add logger instead of console.log
     .then(docs => console.log(docs))
     // end remove
     .then(() => res.sendStatus(httpStatus.CREATED))
     .catch(() => res.sendStatus(httpStatus.BAD_REQUEST));
 });
 
+// Connect to the mongodb and start the server
 MongoClient.connect('mongodb://mongo:27017/movierec')
   .then((database) => { db = database; })
   .then(() => app.listen(3001, () => {
