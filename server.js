@@ -4,8 +4,9 @@ import mongodb from 'mongodb';
 import httpStatus from 'http-status';
 import { json as jsonBodyParser } from 'body-parser';
 
-
 const app = express();
+const MongoClient = mongodb.MongoClient;
+let db = null;
 
 app.use(cors());
 app.use(jsonBodyParser());
@@ -16,14 +17,19 @@ app.get('/', (req, res) => {
 });
 
 app.post('/', (req, res) => {
-  const MongoClient = mongodb.MongoClient;
-  MongoClient.connect('mongodb://mongo:27017/movierec', (err, db) => {
-    const collection = db.collection('watchedmovies');
-    collection.insert(req.body);
-    res.sendStatus(httpStatus.OK);
-  });
+  const collection = db.collection('watchedmovies');
+  collection.insert(req.body)
+    // TODO: Remove test output
+    .then(() => collection.find().toArray())
+    .then(docs => console.log(docs))
+    // end remove
+    .then(() => res.sendStatus(httpStatus.CREATED))
+    .catch(() => res.sendStatus(httpStatus.BAD_REQUEST));
 });
 
-app.listen(3001, () => {
-  console.log('Listening on port 3001');
-});
+MongoClient.connect('mongodb://mongo:27017/movierec')
+  .then((database) => { db = database; })
+  .then(() => app.listen(3001, () => {
+    console.log('Listening on port 3001');
+  }))
+  .catch(err => console.log(err.message));
