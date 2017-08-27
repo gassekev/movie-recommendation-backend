@@ -2,31 +2,37 @@ import express from 'express';
 import cors from 'cors';
 import httpStatus from 'http-status';
 import { json as jsonBodyParser } from 'body-parser';
-import { dbMiddleware } from './src/db';
+import { connectToDB } from './src/data/db';
+import User from './src/data/model/user';
 
 const app = express();
+const user = {
+  username: 'aip',
+  email: 'aip@student.uts.edu.au',
+  seenMovies: [
+    'Fast 10: your seatbelts',
+  ],
+};
+
+User.create(user);
 
 app.use(cors());
 app.use(jsonBodyParser());
-app.use(dbMiddleware);
 
 app.get('/recommendations', (req, res) => {
-  const recommendedMovies = ['Die Hard 4.0', 'Fast 10: your seatbelts',
-    'Crank', 'JS: A Hate Story'];
-  res.json(recommendedMovies);
+  User.findOne({ username: user.username }).exec()
+    .then(dbUser => res.json(dbUser));
 });
 
-app.post('/watchedmovie', (req, res) => {
-  const collection = req.db.collection('watchedmovies');
-  collection.insert(req.body)
-    // TODO: Remove test output
-    .then(() => collection.find().toArray())
-    // TODO Add logger instead of console.log
-    .then(docs => console.log(docs))
-    // end remove
-    .then(() => res.sendStatus(httpStatus.CREATED))
+app.post('/watchedmovies', (req, res) => {
+  User.update(
+    { username: user.username },
+    { $push: { seenMovies: { $each: req.body } } }).exec()
+    .then(() => res.sendStatus(httpStatus.OK))
     .catch(() => res.sendStatus(httpStatus.BAD_REQUEST));
 });
+
+connectToDB();
 
 app.listen(3001, () => {
   console.log('Listening on port 3001');
