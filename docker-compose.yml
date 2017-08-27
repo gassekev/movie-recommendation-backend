@@ -3,6 +3,8 @@ version: '3'
 services:
   movie-rec:
     build: .
+    environment:
+      - NODE_ENV=development
     ports:
       - "3001:3001"
     volumes:
