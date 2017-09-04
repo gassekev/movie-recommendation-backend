@@ -1,12 +1,15 @@
 import express from 'express';
 import cors from 'cors';
-import httpStatus from 'http-status';
 import { json as jsonBodyParser } from 'body-parser';
 import { connectToDB } from './src/data/db';
 import User from './src/data/model/user';
+import movieRouter from './src/controller/router/movie';
 
 const app = express();
-const user = {
+
+// TODO: remove testUser
+// START TESTING
+const testUser = {
   username: 'aip',
   email: 'aip@student.uts.edu.au',
   seenMovies: [
@@ -14,26 +17,17 @@ const user = {
   ],
 };
 
-User.create(user);
+// create test user
+User.create(testUser)
+  .catch(err => console.log(err.message));
+// END TESTING
 
 app.use(cors());
 app.use(jsonBodyParser());
 
-app.get('/recommendations', (req, res) => {
-  User.findOne({ username: user.username }).exec()
-    .then(dbUser => res.json(dbUser));
-});
+// use movie router and append to top level route
+app.use('/', movieRouter);
 
-app.post('/watchedmovies', (req, res) => {
-  User.update(
-    { username: user.username },
-    { $push: { seenMovies: { $each: req.body } } }).exec()
-    .then(() => res.sendStatus(httpStatus.OK))
-    .catch(() => res.sendStatus(httpStatus.BAD_REQUEST));
-});
-
-connectToDB();
-
-app.listen(3001, () => {
-  console.log('Listening on port 3001');
-});
+connectToDB()
+  .then(() => app.listen(3001))
+  .catch(err => console.log(err.message));
