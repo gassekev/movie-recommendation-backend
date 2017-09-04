@@ -6,16 +6,44 @@ mongoose.Promise = Promise;
 
 const options = {
   promiseLibrary: Promise,
+  useMongoClient: true,
 };
 
-mongoose.connection.on('error', (err) => {
+const connection = mongoose.connection;
+const STATES = mongoose.STATES;
+
+connection.on('error', (err) => {
   console.log(`db connection error: ${err}`);
 });
 
 export function connectToDB() {
-  mongoose.connect(uri, options);
+  if (connection.readyState === STATES.disconnected) {
+    return new Promise((resolve, reject) => {
+      connection.once('open', () => {
+        console.log(`db connected to: ${uri}`);
+        resolve(connection);
+      });
+
+      mongoose.connect(uri, options)
+        .catch(reject);
+    });
+  }
+  console.log('db connection already open');
+  return Promise.resolve(connection);
 }
 
 export function disconnectFromDB() {
-  mongoose.disconnect();
+  if (connection.readyState === STATES.connected) {
+    return new Promise((resolve, reject) => {
+      connection.once('close', () => {
+        console.log(`db disconnected from: ${uri}`);
+        resolve(connection);
+      });
+
+      mongoose.disconnect()
+        .catch(reject);
+    });
+  }
+  console.log('db connection already closed');
+  return Promise.resolve(connection);
 }
