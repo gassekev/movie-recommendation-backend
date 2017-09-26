@@ -5,6 +5,7 @@ services:
     build: .
     environment:
       - NODE_ENV=development
+      - JWT_SECRET=supersecret
     ports:
       - "3001:3001"
     volumes:

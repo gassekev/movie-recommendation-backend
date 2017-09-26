@@ -3,7 +3,7 @@ import cors from 'cors';
 import { json as jsonBodyParser } from 'body-parser';
 import { connectToDB } from './src/data/db';
 import User from './src/data/model/user';
-import movieRouter from './src/controller/router/movie';
+import controller from './src/controller/';
 
 const app = express();
 
@@ -26,7 +26,7 @@ app.use(cors());
 app.use(jsonBodyParser());
 
 // use movie router and append to top level route
-app.use('/', movieRouter);
+app.use('/', controller);
 
 connectToDB()
   .then(() => app.listen(3001))

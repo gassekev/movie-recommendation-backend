@@ -20,7 +20,7 @@ export default mongoose.Schema({
   },
   passwordHash: {
     type: String,
-    default: null,
+    required: [true, 'passwordHash is required'],
   },
   seenMovies: {
     type: [String],
