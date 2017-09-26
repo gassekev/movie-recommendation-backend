@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 import Joi from 'joi';
 import crypto from 'crypto';
 import User from '../../data/model/user';
-import { comparePassword, hashPassword } from '../../util';
+import { validatePassword, hashPassword } from '../../util';
 
 const tokenExpiresIn = 60 * 60;
 
@@ -25,13 +25,13 @@ const router = new Router();
 router.post('/login', (req, res) => {
   Joi.validate(req.body, userCredentialSchema, { stripUnknown: true })
     .then(credentials => Promise.all([
-      User.findOne({ username: credentials.username }).exec(),
       Promise.resolve(credentials),
+      User.findOne({ username: credentials.username }).exec(),
     ]))
     .catch(() => res.sendStatus(httpStatus.BAD_REQUEST))
-    .then(([user, credentials]) => Promise.all([
+    .then(([credentials, user]) => Promise.all([
       Promise.resolve(user),
-      comparePassword(credentials.password, user.passwordHash),
+      validatePassword(credentials.password, user.passwordHash),
     ]))
     .catch(() => res.sendStatus(httpStatus.UNAUTHORIZED))
     .then(([user]) => {
@@ -61,8 +61,9 @@ router.post('/register', (req, res) => {
       passwordHash,
     }))
     .then(user => User.create(user))
+    .catch(() => res.sendStatus(httpStatus.BAD_REQUEST))
     .then(() => res.sendStatus(httpStatus.CREATED))
-    .catch(() => res.sendStatus(httpStatus.BAD_REQUEST));
+    .catch(() => res.sendStatus(httpStatus.INTERNAL_SERVER_ERROR));
 });
 
 export default router;

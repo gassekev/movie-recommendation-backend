@@ -4,7 +4,7 @@ const saltRounds = 10;
 
 export const hashPassword = password => bcrypt.hash(password, saltRounds);
 
-export const comparePassword = (password, passwordHash) =>
+export const validatePassword = (password, passwordHash) =>
   bcrypt.compare(password, passwordHash)
     .then((result) => {
       if (result) {
