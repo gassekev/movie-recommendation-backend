@@ -2,9 +2,8 @@ import { Router } from 'express';
 import httpStatus from 'http-status';
 import jwt from 'jsonwebtoken';
 import Joi from 'joi';
-import crypto from 'crypto';
 import User from '../../data/model/user';
-import { validatePassword, hashPassword } from '../../util';
+import { validatePassword, hashPassword, generateRandomId } from '../../util';
 
 const tokenExpiresIn = 60 * 60;
 
@@ -37,7 +36,7 @@ router.post('/login', (req, res) => {
     .then(([user]) => {
       const jwtOptions = {
         expiresIn: tokenExpiresIn,
-        jwtid: crypto.randomBytes(16).toString('hex'),
+        jwtid: generateRandomId(16),
         subject: user.username,
       };
       const token = jwt.sign({}, process.env.JWT_SECRET, jwtOptions);

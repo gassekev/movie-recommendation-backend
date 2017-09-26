@@ -1,4 +1,5 @@
 import bcrypt from 'bcrypt';
+import crypto from 'crypto';
 
 const saltRounds = 10;
 
@@ -12,3 +13,5 @@ export const validatePassword = (password, passwordHash) =>
       }
       throw new Error('password mismatch');
     });
+
+export const generateRandomId = length => crypto.randomBytes(length).toString('hex');
