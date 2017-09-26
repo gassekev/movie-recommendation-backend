@@ -5,23 +5,15 @@ import Joi from 'joi';
 import User from '../../data/model/user';
 import { validatePassword, hashPassword, generateRandomId } from '../../util';
 
+const router = new Router();
 const tokenExpiresIn = 60 * 60;
 
-const userCredentialSchema = Joi.object().keys({
-  username: Joi.string().required(),
-  password: Joi.string().required(),
-});
-
-const userRegistrationSchema = Joi.object().keys({
-  username: Joi.string().required(),
-  password: Joi.string().required(),
-  passwordConfirmation: Joi.string().valid(Joi.ref('password')).required(),
-  email: Joi.string().email().required(),
-});
-
-const router = new Router();
-
 router.post('/login', (req, res) => {
+  const userCredentialSchema = Joi.object().keys({
+    username: Joi.string().required(),
+    password: Joi.string().required(),
+  });
+
   Joi.validate(req.body, userCredentialSchema, { stripUnknown: true })
     .then(credentials => Promise.all([
       Promise.resolve(credentials),
@@ -47,6 +39,13 @@ router.post('/login', (req, res) => {
 });
 
 router.post('/register', (req, res) => {
+  const userRegistrationSchema = Joi.object().keys({
+    username: Joi.string().required(),
+    password: Joi.string().required(),
+    passwordConfirmation: Joi.string().valid(Joi.ref('password')).required(),
+    email: Joi.string().email().required(),
+  });
+
   Joi.validate(req.body, userRegistrationSchema, { stripUnknown: true })
     .then(userData => Promise.all([
       Promise.resolve({
