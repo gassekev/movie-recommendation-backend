@@ -1,6 +1,6 @@
 {
   "jwt": {
-    "secret": "supersecret",
+    "secret": "jwtsecret",
     "expiresIn": 3600
   },
   "bcrypt": {
@@ -12,6 +12,8 @@
   "db": {
     "name": "movie-rec",
     "port": 27017,
-    "container": "mongo"
+    "container": "mongo",
+    "username": "admin",
+    "password": "password"
   }
 }

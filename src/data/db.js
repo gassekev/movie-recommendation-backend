@@ -6,8 +6,13 @@ const uri = `mongodb://${config.get('db.container')}:${config.get('db.port')}/${
 mongoose.Promise = Promise;
 
 const options = {
+  user: config.get('db.username'),
+  pass: config.get('db.password'),
   promiseLibrary: Promise,
   useMongoClient: true,
+  auth: {
+    authdb: 'admin',
+  },
 };
 
 const connection = mongoose.connection;
