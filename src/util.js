@@ -1,9 +1,8 @@
 import bcrypt from 'bcrypt';
 import crypto from 'crypto';
+import config from 'config';
 
-const saltRounds = 10;
-
-export const hashPassword = password => bcrypt.hash(password, saltRounds);
+export const hashPassword = password => bcrypt.hash(password, config.get('bcrypt.saltRounds'));
 
 export const validatePassword = (password, passwordHash) =>
   bcrypt.compare(password, passwordHash)
