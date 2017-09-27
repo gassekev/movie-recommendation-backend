@@ -6,7 +6,7 @@ To get the project running first it is required to have Docker (including docker
 `docker-compose up`
 
 ### Build
-`docker-compose build`
+`docker-compose build --no-cache`
 
 ### Down
 `docker-compose down`
@@ -14,7 +14,7 @@ To get the project running first it is required to have Docker (including docker
 ### Lint
 `docker-compose run movie-rec lint`
 
-The Backend is now avaliable on http://localhost:3001##/
+The Backend is now avaliable on http://localhost:3001/
 
 ## Code Style
 We make use of eslint to ensure a consistent code style throughout the project.
