@@ -2,11 +2,11 @@ import { Router } from 'express';
 import httpStatus from 'http-status';
 import jwt from 'jsonwebtoken';
 import Joi from 'joi';
+import config from 'config';
 import User from '../../data/model/user';
 import { validatePassword, hashPassword, generateRandomId } from '../../util';
 
 const router = new Router();
-const tokenExpiresIn = 60 * 60;
 
 router.post('/login', (req, res) => {
   const userCredentialSchema = Joi.object().keys({
@@ -27,11 +27,11 @@ router.post('/login', (req, res) => {
     .catch(() => res.sendStatus(httpStatus.UNAUTHORIZED))
     .then(([user]) => {
       const jwtOptions = {
-        expiresIn: tokenExpiresIn,
+        expiresIn: config.get('jwt.expiresIn'),
         jwtid: generateRandomId(16),
         subject: user.username,
       };
-      const token = jwt.sign({}, process.env.JWT_SECRET, jwtOptions);
+      const token = jwt.sign({}, config.get('jwt.secret'), jwtOptions);
 
       res.json({ token });
     })

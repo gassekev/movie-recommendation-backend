@@ -5,7 +5,8 @@ import User from '../../data/model/user';
 const router = new Router();
 
 router.get('/recommendations', (req, res) => {
-  User.findOne({}).exec()
+  console.log(req.user.subject);
+  User.findOne({ username: req.user.subject }).exec()
     .then(dbUser => res.json(dbUser));
 });
 

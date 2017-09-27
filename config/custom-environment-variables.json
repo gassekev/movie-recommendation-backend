@@ -1,0 +1,8 @@
+{
+  "jwt": {
+    "secret": "JWT_SECRET"
+  },
+  "http": {
+    "port": "PORT"
+  }
+}

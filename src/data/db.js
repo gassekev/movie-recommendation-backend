@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
+import config from 'config';
 
-const uri = 'mongodb://mongo:27017/movierec';
+const uri = `mongodb://${config.get('db.container')}:${config.get('db.port')}/${config.get('db.name')}`;
 
 mongoose.Promise = Promise;
 

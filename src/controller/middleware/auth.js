@@ -1,4 +1,5 @@
 import jwtExpress from 'express-jwt';
+import config from 'config';
 
 export default jwtExpress({
-  secret: process.env.JWT_SECRET });
+  secret: config.get('jwt.secret') });

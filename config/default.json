@@ -1,0 +1,17 @@
+{
+  "jwt": {
+    "secret": "supersecret",
+    "expiresIn": 3600
+  },
+  "bcrypt": {
+    "saltRounds": 10
+  },
+  "http": {
+    "port": 3000
+  },
+  "db": {
+    "name": "movie-rec",
+    "port": 27017,
+    "container": "mongo"
+  }
+}
