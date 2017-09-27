@@ -8,7 +8,7 @@ import { validatePassword, hashPassword, generateRandomId } from '../../util';
 
 const router = new Router();
 
-router.post('/login', (req, res) => {
+router.post('/login', (req, res, next) => {
   const userCredentialSchema = Joi.object().keys({
     username: Joi.string().required(),
     password: Joi.string().required(),
@@ -35,10 +35,10 @@ router.post('/login', (req, res) => {
 
       res.json({ token });
     })
-    .catch(() => res.sendStatus(httpStatus.INTERNAL_SERVER_ERROR));
+    .catch(err => next(err));
 });
 
-router.post('/register', (req, res) => {
+router.post('/register', (req, res, next) => {
   const userRegistrationSchema = Joi.object().keys({
     username: Joi.string().required(),
     password: Joi.string().required(),
@@ -61,7 +61,7 @@ router.post('/register', (req, res) => {
     .then(user => User.create(user))
     .catch(() => res.sendStatus(httpStatus.BAD_REQUEST))
     .then(() => res.sendStatus(httpStatus.CREATED))
-    .catch(() => res.sendStatus(httpStatus.INTERNAL_SERVER_ERROR));
+    .catch(err => next(err));
 });
 
 export default router;
