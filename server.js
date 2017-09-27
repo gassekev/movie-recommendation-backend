@@ -1,5 +1,6 @@
 import express from 'express';
 import cors from 'cors';
+import config from 'config';
 import { json as jsonBodyParser } from 'body-parser';
 import { connectToDB } from './src/data/db';
 import controller from './src/controller/';
@@ -13,5 +14,5 @@ app.use(jsonBodyParser());
 app.use('/', controller);
 
 connectToDB()
-  .then(() => app.listen(3001))
+  .then(() => app.listen(config.get('http.port')))
   .catch(err => console.log(err.message));
