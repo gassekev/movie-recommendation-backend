@@ -31,7 +31,7 @@ router.post('/login', (req, res, next) => {
         jwtid: generateRandomId(16),
         subject: user.username,
       };
-      const token = jwt.sign({}, config.get('jwt.secret'), jwtOptions);
+      const token = jwt.sign({ isAdmin: user.isAdmin }, config.get('jwt.secret'), jwtOptions);
 
       res.json({ token });
     })
