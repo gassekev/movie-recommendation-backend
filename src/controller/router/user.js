@@ -6,45 +6,44 @@ const router = new Router();
 
 router.param('username', (req, res, next, username) => {
   if (req.auth.sub === username || req.auth.isAdmin) {
-    User.findOne({ username }).exec()
-      .then((user) => {
-        if (user) {
-          req.user = user;
-          next();
-        } else {
-          res.sendStatus(httpStatus.NOT_FOUND);
-        }
-      })
-      .catch(() => res.sendStatus(httpStatus.INTERNAL_SERVER_ERROR));
+    next();
   } else {
     res.sendStatus(httpStatus.UNAUTHORIZED);
   }
 });
 
-router.get('/:username', (req, res) => res.json(req.user));
-
-router.delete('/:username', (req, res) => {
-  req.user.remove()
+router.get('/:username', (req, res) => {
+  User.findOne({ username: req.params.username }).select(User.publicProjection()).exec()
     .then((user) => {
       if (user) {
+        res.json(user);
+      } else {
+        res.sendStatus(httpStatus.NOT_FOUND);
+      }
+    });
+});
+
+router.delete('/:username', (req, res) => {
+  User.deleteOne({ username: req.params.username }).exec()
+    .then(({ nRemoved }) => {
+      if (nRemoved === 1) {
         res.sendStatus(httpStatus.OK);
       } else {
-        throw new Error('user not deleted');
+        res.sendStatus(httpStatus.NOT_FOUND);
       }
-    })
-    .catch(() => res.sendStatus(httpStatus.INTERNAL_SERVER_ERROR));
+    });
 });
 
 router.put('/:username/watched', (req, res) => {
-  req.user.update({ $push: { seenMovies: { $each: req.body } } }).exec()
+  User.updateOne({ username: req.params.username },
+    { $push: { seenMovies: { $each: req.body } } }).exec()
     .then((result) => {
       if (result.n === 1 && result.ok === 1 && result.nModified === 1) {
         res.sendStatus(httpStatus.OK);
       } else {
-        throw new Error('watched list not updated');
+        res.sendStatus(httpStatus.NOT_FOUND);
       }
-    })
-    .catch(() => res.sendStatus(httpStatus.INTERNAL_SERVER_ERROR));
+    });
 });
 
 export default router;
