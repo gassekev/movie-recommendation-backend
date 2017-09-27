@@ -1,6 +1,7 @@
 import bcrypt from 'bcrypt';
 import crypto from 'crypto';
 import config from 'config';
+import UnauthorizedError from './error/unauthorized';
 
 export const hashPassword = password => bcrypt.hash(password, config.get('bcrypt.saltRounds'));
 
@@ -10,7 +11,7 @@ export const validatePassword = (password, passwordHash) =>
       if (result) {
         return;
       }
-      throw new Error('password mismatch');
+      throw new UnauthorizedError('wrong username or password');
     });
 
 export const generateRandomId = length => crypto.randomBytes(length).toString('hex');

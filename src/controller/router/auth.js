@@ -19,12 +19,10 @@ router.post('/login', (req, res, next) => {
       Promise.resolve(credentials),
       User.findOne({ username: credentials.username }).exec(),
     ]))
-    .catch(() => res.sendStatus(httpStatus.BAD_REQUEST))
     .then(([credentials, user]) => Promise.all([
       Promise.resolve(user),
       validatePassword(credentials.password, user.passwordHash),
     ]))
-    .catch(() => res.sendStatus(httpStatus.UNAUTHORIZED))
     .then(([user]) => {
       const jwtOptions = {
         expiresIn: config.get('jwt.expiresIn'),
@@ -59,7 +57,6 @@ router.post('/register', (req, res, next) => {
       passwordHash,
     }))
     .then(user => User.create(user))
-    .catch(() => res.sendStatus(httpStatus.BAD_REQUEST))
     .then(() => res.sendStatus(httpStatus.CREATED))
     .catch(err => next(err));
 });
