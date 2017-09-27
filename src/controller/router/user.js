@@ -8,7 +8,7 @@ router.param('username', (req, res, next, username) => {
   if (req.auth.sub === username || req.auth.isAdmin) {
     next();
   } else {
-    res.sendStatus(httpStatus.UNAUTHORIZED);
+    res.sendStatus(httpStatus.NOT_FOUND);
   }
 });
 
