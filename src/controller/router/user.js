@@ -4,18 +4,47 @@ import User from '../../data/model/user';
 
 const router = new Router();
 
-router.get('/recommendations', (req, res) => {
-  console.log(req.user.subject);
-  User.findOne({ username: req.user.subject }).exec()
-    .then(dbUser => res.json(dbUser));
+router.param('username', (req, res, next, username) => {
+  if (req.auth.sub === username || req.auth.isAdmin) {
+    User.findOne({ username }).exec()
+      .then((user) => {
+        if (user) {
+          req.user = user;
+          next();
+        } else {
+          res.sendStatus(httpStatus.NOT_FOUND);
+        }
+      })
+      .catch(() => res.sendStatus(httpStatus.INTERNAL_SERVER_ERROR));
+  } else {
+    res.sendStatus(httpStatus.UNAUTHORIZED);
+  }
 });
 
-router.post('/watched', (req, res) => {
-  User.update(
-    {},
-    { $push: { seenMovies: { $each: req.body } } }).exec()
-    .then(() => res.sendStatus(httpStatus.OK))
-    .catch(() => res.sendStatus(httpStatus.BAD_REQUEST));
+router.get('/:username', (req, res) => res.json(req.user));
+
+router.delete('/:username', (req, res) => {
+  req.user.remove()
+    .then((user) => {
+      if (user) {
+        res.sendStatus(httpStatus.OK);
+      } else {
+        throw new Error('user not deleted');
+      }
+    })
+    .catch(() => res.sendStatus(httpStatus.INTERNAL_SERVER_ERROR));
+});
+
+router.put('/:username/watched', (req, res) => {
+  req.user.update({ $push: { seenMovies: { $each: req.body } } }).exec()
+    .then((result) => {
+      if (result.n === 1 && result.ok === 1 && result.nModified === 1) {
+        res.sendStatus(httpStatus.OK);
+      } else {
+        throw new Error('watched list not updated');
+      }
+    })
+    .catch(() => res.sendStatus(httpStatus.INTERNAL_SERVER_ERROR));
 });
 
 export default router;
