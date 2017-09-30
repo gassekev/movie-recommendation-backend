@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 import Joi from 'joi';
 import config from 'config';
 import User from '../../data/model/user';
-import { validatePassword, hashPassword, generateRandomId } from '../../util';
+import { validatePassword, hashPassword, generateRandomId, validateUser } from '../../util';
 
 const router = new Router();
 
@@ -20,10 +20,10 @@ router.post('/login', (req, res, next) => {
       User.findOne({ username: credentials.username }).exec(),
     ]))
     .then(([credentials, user]) => Promise.all([
-      Promise.resolve(user),
+      validateUser(user),
       validatePassword(credentials.password, user.passwordHash),
     ]))
-    .then(([user]) => {
+    .then(([user, isValidPassword]) => {
       const jwtOptions = {
         expiresIn: config.get('jwt.expiresIn'),
         jwtid: generateRandomId(16),
@@ -31,7 +31,7 @@ router.post('/login', (req, res, next) => {
       };
       const token = jwt.sign({ isAdmin: user.isAdmin }, config.get('jwt.secret'), jwtOptions);
 
-      res.json({ token });
+      return res.json({ token });
     })
     .catch(err => next(err));
 });
