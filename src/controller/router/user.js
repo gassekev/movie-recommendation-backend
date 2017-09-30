@@ -5,7 +5,7 @@ import User from '../../data/model/user';
 const router = new Router();
 
 router.param('username', (req, res, next, username) => {
-  if (req.auth.sub === username || req.auth.isAdmin) {
+  if (res.locals.auth.sub === username || res.locals.auth.isAdmin) {
     next();
   } else {
     res.sendStatus(httpStatus.NOT_FOUND);
