@@ -8,7 +8,7 @@ import User from '../../data/model/user';
 import UnauthorizedError from '../../error/unauthorized';
 import { generateRandomId } from '../../util';
 
-export default jwtExpress({
+export const validateUserToken = jwtExpress({
   secret: config.get('jwt.secret'),
   resultProperty: 'locals.auth' });
 
