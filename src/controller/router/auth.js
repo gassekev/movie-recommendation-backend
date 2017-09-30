@@ -1,27 +1,22 @@
 import { Router } from 'express';
 import httpStatus from 'http-status';
 import jwt from 'jsonwebtoken';
-import Joi from 'joi';
 import config from 'config';
 import User from '../../data/model/user';
-import { validatePassword, hashPassword, generateRandomId, validateUser } from '../../util';
+import { validatePassword, hashPassword, generateRandomId,
+  validateUser, validateLoginUserData, validateRegisterUserData } from '../../util';
 
 const router = new Router();
 
 router.post('/login', (req, res, next) => {
-  const userCredentialSchema = Joi.object().keys({
-    username: Joi.string().required(),
-    password: Joi.string().required(),
-  });
-
-  Joi.validate(req.body, userCredentialSchema, { stripUnknown: true })
-    .then(credentials => Promise.all([
-      Promise.resolve(credentials),
-      User.findOne({ username: credentials.username }).exec(),
+  validateLoginUserData(req.body)
+    .then(userData => Promise.all([
+      Promise.resolve(userData),
+      User.findOne({ username: userData.username }).exec(),
     ]))
-    .then(([credentials, user]) => Promise.all([
+    .then(([userData, user]) => Promise.all([
       validateUser(user),
-      validatePassword(credentials.password, user.passwordHash),
+      validatePassword(userData.password, user.passwordHash),
     ]))
     .then(([user, isValidPassword]) => {
       const jwtOptions = {
@@ -37,14 +32,7 @@ router.post('/login', (req, res, next) => {
 });
 
 router.post('/register', (req, res, next) => {
-  const userRegistrationSchema = Joi.object().keys({
-    username: Joi.string().required(),
-    password: Joi.string().required(),
-    passwordConfirmation: Joi.string().valid(Joi.ref('password')).required(),
-    email: Joi.string().email().required(),
-  });
-
-  Joi.validate(req.body, userRegistrationSchema, { stripUnknown: true })
+  validateRegisterUserData(req.body)
     .then(userData => Promise.all([
       Promise.resolve({
         username: userData.username,
