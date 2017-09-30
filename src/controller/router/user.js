@@ -8,7 +8,23 @@ router.param('username', (req, res, next, username) => {
   if (res.locals.auth.sub === username || res.locals.auth.isAdmin) {
     next();
   } else {
-    res.sendStatus(httpStatus.NOT_FOUND);
+    res.sendStatus(httpStatus.FORBIDDEN);
+  }
+});
+
+router.get('/', (req, res, next) => {
+  if (res.locals.auth.isAdmin) {
+    User.find({}).select(User.publicProjection()).exec()
+      .then((users) => {
+        if (users) {
+          res.json(users);
+        } else {
+          res.sendStatus(httpStatus.NOT_FOUND);
+        }
+      })
+      .catch(err => next(err));
+  } else {
+    res.sendStatus(httpStatus.FORBIDDEN);
   }
 });
 
