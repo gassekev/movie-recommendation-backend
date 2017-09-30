@@ -1,52 +1,17 @@
 import { Router } from 'express';
 import httpStatus from 'http-status';
-import jwt from 'jsonwebtoken';
-import config from 'config';
-import User from '../../data/model/user';
-import { validatePassword, hashPassword, generateRandomId,
-  validateUser, validateLoginUserData, validateRegisterUserData } from '../../util';
+import { validateLoginUserData, validateRegisterUserData,
+  findUser, validateUserPassword, createUserToken, hashUserPassword,
+  createUser } from '../middleware/auth';
 
 const router = new Router();
 
-router.post('/login', (req, res, next) => {
-  validateLoginUserData(req.body)
-    .then(userData => Promise.all([
-      Promise.resolve(userData),
-      User.findOne({ username: userData.username }).exec(),
-    ]))
-    .then(([userData, user]) => Promise.all([
-      validateUser(user),
-      validatePassword(userData.password, user.passwordHash),
-    ]))
-    .then(([user, isValidPassword]) => {
-      const jwtOptions = {
-        expiresIn: config.get('jwt.expiresIn'),
-        jwtid: generateRandomId(16),
-        subject: user.username,
-      };
-      const token = jwt.sign({ isAdmin: user.isAdmin }, config.get('jwt.secret'), jwtOptions);
+router.post('/login', validateLoginUserData, findUser, validateUserPassword,
+  createUserToken, (req, res) =>
+    res.json({ token: res.locals.token }));
 
-      return res.json({ token });
-    })
-    .catch(err => next(err));
-});
-
-router.post('/register', (req, res, next) => {
-  validateRegisterUserData(req.body)
-    .then(userData => Promise.all([
-      Promise.resolve({
-        username: userData.username,
-        email: userData.email,
-      }),
-      hashPassword(userData.password),
-    ]))
-    .then(([user, passwordHash]) => ({
-      ...user,
-      passwordHash,
-    }))
-    .then(user => User.create(user))
-    .then(() => res.sendStatus(httpStatus.CREATED))
-    .catch(err => next(err));
-});
+router.post('/register', validateRegisterUserData, hashUserPassword, createUser,
+  (req, res) =>
+    res.sendStatus(httpStatus.CREATED));
 
 export default router;
