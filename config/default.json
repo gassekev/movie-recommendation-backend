@@ -12,8 +12,13 @@
   "db": {
     "name": "movie-rec",
     "port": 27017,
-    "container": "mongo",
+    "host": "mongo",
     "username": "admin",
+    "password": "password"
+  },
+  "redis": {
+    "port": 6379,
+    "host": "redis",
     "password": "password"
   }
 }

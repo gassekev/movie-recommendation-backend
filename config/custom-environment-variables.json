@@ -6,7 +6,10 @@
     "port": "PORT"
   },
   "db": {
-    "username": "MONGO_INITDB_ROOT_USERNAME",
-    "password": "MONGO_INITDB_ROOT_PASSWORD"
+    "username": "MONGO_ROOT_USERNAME",
+    "password": "MONGO_ROOT_PASSWORD"
+  },
+  "redis": {
+    "port": "REDIS_PORT"
   }
 }

@@ -2,7 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import config from 'config';
 import { json as jsonBodyParser } from 'body-parser';
-import { connectToDB } from './src/data/db';
+import connectToDB from './src/data/db';
 import controller from './src/controller/';
 
 const app = express();

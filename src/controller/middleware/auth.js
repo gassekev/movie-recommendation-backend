@@ -7,10 +7,36 @@ import ValidationError from '../../error/validation';
 import User from '../../data/model/user';
 import UnauthorizedError from '../../error/unauthorized';
 import { generateRandomId } from '../../util';
+import redisClient from '../../data/redis';
+
+const isRevokedCallback = (req, payload, done) => {
+  const tokenId = payload.jti;
+
+  if (redisClient.connected) {
+    redisClient.exists(tokenId, (err, result) => {
+      done(null, !!result);
+    });
+  } else {
+    done(new Error('redis client not connected'));
+  }
+};
 
 export const validateUserToken = jwtExpress({
   secret: config.get('jwt.secret'),
-  resultProperty: 'locals.auth' });
+  resultProperty: 'locals.auth',
+  isRevoked: isRevokedCallback,
+});
+
+export const revokeUserToken = (req, res, next) => {
+  const auth = res.locals.auth;
+
+  if (redisClient.connected) {
+    redisClient.set(auth.jti, '', 'EX', (auth.exp - auth.iat));
+    next();
+  } else {
+    next(new Error('redis client not connected'));
+  }
+};
 
 export const createUserToken = (req, res, next) => {
   const user = res.locals.user;

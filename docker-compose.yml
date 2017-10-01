@@ -7,6 +7,9 @@ services:
       - NODE_ENV=development
       - JWT_SECRET=jwtsecret
       - PORT=3001
+      - MONGO_ROOT_USERNAME=admin
+      - MONGO_ROOT_PASSWORD=password
+      - REDIS_PASSWORD=password
     ports:
       - "3001:3001"
     volumes:
@@ -14,6 +17,7 @@ services:
       - /usr/src/app/node_modules
     links:
       - mongo
+      - redis
   mongo:
     image: mongo:3.4
     ports:
@@ -21,3 +25,8 @@ services:
     environment:
       - MONGO_INITDB_ROOT_USERNAME=admin
       - MONGO_INITDB_ROOT_PASSWORD=password
+  redis:
+    image: redis:3.2
+    ports:
+      - "6379:6379"
+    command: ["redis-server", "--requirepass", "password"]
