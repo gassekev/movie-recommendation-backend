@@ -15,4 +15,4 @@ app.use('/', controller);
 
 connectToDB()
   .then(() => app.listen(config.get('http.port')))
-  .catch(err => console.log(err.message));
+  .catch(err => console.log(err));
