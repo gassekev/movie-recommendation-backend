@@ -38,10 +38,10 @@ export const revokeUserToken = (req, res, next) => {
 
   if (redisClient.connected) {
     redisClient.set(auth.jti, '', 'EX', (auth.exp - auth.iat));
-    next();
-  } else {
-    next(new Error('redis client not connected'));
+    return next();
   }
+
+  return next(new Error('redis client not connected'));
 };
 
 export const createUserToken = (req, res, next) => {
@@ -85,10 +85,9 @@ export const hashUserPassword = (req, res, next) => {
 };
 
 export const createUser = (req, res, next) => {
-  const validatedBody = req.body;
   const user = {
-    username: validatedBody.username,
-    email: validatedBody.email,
+    username: req.body.username,
+    email: req.body.email,
     ...res.locals.user,
   };
 
@@ -100,13 +99,36 @@ export const createUser = (req, res, next) => {
     .catch(err => next(err));
 };
 
-export const findUser = (req, res, next) => {
+export const saveUser = (req, res, next) => {
+  const user = res.locals.user;
+
+  user.save()
+    .then(() => next())
+    .catch(err => next(err));
+};
+
+export const findUserByUsername = (req, res, next) => {
   const username = req.body.username;
 
   User.findOne({ username }).exec()
     .then((user) => {
       if (!user) {
-        throw new AuthError('wrong username or password');
+        throw new AuthError('wrong username/email or password');
+      }
+
+      res.locals.user = user;
+      return next();
+    })
+    .catch(err => next(err));
+};
+
+export const findUserByEmail = (req, res, next) => {
+  const email = req.body.email;
+
+  User.findOne({ email }).exec()
+    .then((user) => {
+      if (!user) {
+        throw new AuthError('wrong username/email or password');
       }
 
       res.locals.user = user;
@@ -133,4 +155,59 @@ export const validateRegisterUserData = (req, res, next) => {
   });
 
   validateData(req.body, userRegistrationSchema, next);
+};
+
+export const validateResetEmail = (req, res, next) => {
+  const emailResetSchema = Joi.object().keys({
+    email: Joi.string().email().required(),
+  });
+
+  validateData(req.body, emailResetSchema, next);
+};
+
+export const validateResetUserData = (req, res, next) => {
+  const userResetSchema = Joi.object().keys({
+    username: Joi.string().required(),
+    password: Joi.string().required(),
+    passwordConfirmation: Joi.string().valid(Joi.ref('password')).required(),
+  });
+
+  validateData(req.body, userResetSchema, next);
+};
+
+export const validateUserResetToken = (req, res, next) => {
+  const token = req.query.resetToken;
+  const user = res.locals.user;
+
+  if (token && user.resetToken && user.resetTokenExpires
+    && token === user.resetToken && user.resetTokenExpires > new Date()) {
+    return next();
+  }
+
+  throw new AuthError('reset token invalid or missing');
+};
+
+export const createUserResetToken = (req, res, next) => {
+  const resetToken = generateRandomId(16);
+  const now = new Date();
+  const resetTokenExpires = new Date(now.getTime() + config.get('user.resetTokenExpiresIn'));
+
+  if (!res.locals.user) {
+    res.locals.user = {};
+  }
+
+  res.locals.user.resetToken = resetToken;
+  res.locals.user.resetTokenExpires = resetTokenExpires;
+  return next();
+};
+
+export const unsetResetToken = (req, res, next) => {
+  const user = res.locals.user;
+
+  if (user.resetToken && user.resetTokenExpires) {
+    user.resetToken = undefined;
+    user.resetTokenExpires = undefined;
+  }
+
+  return next();
 };

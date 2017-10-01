@@ -20,5 +20,8 @@
     "port": 6379,
     "host": "redis",
     "password": "password"
+  },
+  "user": {
+    "resetTokenExpiresIn": 3600
   }
 }
