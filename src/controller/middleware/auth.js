@@ -5,7 +5,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import ValidationError from '../../error/validation';
 import User from '../../data/model/user';
-import UnauthorizedError from '../../error/unauthorized';
+import AuthError from '../../error/auth';
 import { generateRandomId } from '../../util';
 import redisClient from '../../data/redis';
 
@@ -19,6 +19,12 @@ const isRevokedCallback = (req, payload, done) => {
   } else {
     done(new Error('redis client not connected'));
   }
+};
+
+const validateData = (data, schema, next) => {
+  Joi.validate(data, schema)
+    .then(() => next())
+    .catch(() => next(new ValidationError('validation of user data failed')));
 };
 
 export const validateUserToken = jwtExpress({
@@ -51,12 +57,12 @@ export const createUserToken = (req, res, next) => {
 };
 
 export const validateUserPassword = (req, res, next) => {
-  const password = res.locals.validatedBody.password;
+  const password = req.body.password;
 
   bcrypt.compare(password, res.locals.user.passwordHash)
     .then((valid) => {
       if (valid === false) {
-        throw new UnauthorizedError('wrong username or password');
+        throw new AuthError('wrong username or password');
       }
       return next();
     })
@@ -64,7 +70,7 @@ export const validateUserPassword = (req, res, next) => {
 };
 
 export const hashUserPassword = (req, res, next) => {
-  const password = res.locals.validatedBody.password;
+  const password = req.body.password;
 
   bcrypt.hash(password, config.get('bcrypt.saltRounds'))
     .then((passwordHash) => {
@@ -79,7 +85,7 @@ export const hashUserPassword = (req, res, next) => {
 };
 
 export const createUser = (req, res, next) => {
-  const validatedBody = res.locals.validatedBody;
+  const validatedBody = req.body;
   const user = {
     username: validatedBody.username,
     email: validatedBody.email,
@@ -95,12 +101,12 @@ export const createUser = (req, res, next) => {
 };
 
 export const findUser = (req, res, next) => {
-  const username = res.locals.validatedBody.username;
+  const username = req.body.username;
 
   User.findOne({ username }).exec()
     .then((user) => {
       if (!user) {
-        throw new UnauthorizedError('wrong username or password');
+        throw new AuthError('wrong username or password');
       }
 
       res.locals.user = user;
@@ -115,12 +121,7 @@ export const validateLoginUserData = (req, res, next) => {
     password: Joi.string().required(),
   });
 
-  Joi.validate(req.body, userCredentialSchema, { stripUnknown: true })
-    .then((result) => {
-      res.locals.validatedBody = result;
-      return next();
-    })
-    .catch(() => next(new ValidationError('validation of user data failed')));
+  validateData(req.body, userCredentialSchema, next);
 };
 
 export const validateRegisterUserData = (req, res, next) => {
@@ -131,10 +132,5 @@ export const validateRegisterUserData = (req, res, next) => {
     email: Joi.string().email().required(),
   });
 
-  Joi.validate(req.body, userRegistrationSchema, { stripUnknown: true })
-    .then((result) => {
-      res.locals.validatedBody = result;
-      return next();
-    })
-    .catch(() => next(new ValidationError('validation of user data failed')));
+  validateData(req.body, userRegistrationSchema, next);
 };
