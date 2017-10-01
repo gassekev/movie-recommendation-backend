@@ -36,12 +36,12 @@ export const validateUserToken = jwtExpress({
 export const revokeUserToken = (req, res, next) => {
   const auth = res.locals.auth;
 
-  if (redisClient.connected) {
-    redisClient.set(auth.jti, '', 'EX', (auth.exp - auth.iat));
-    return next();
+  if (!redisClient.connected) {
+    throw new Error('redis client not connected');
   }
 
-  return next(new Error('redis client not connected'));
+  redisClient.set(auth.jti, '', 'EX', (auth.exp - auth.iat));
+  return next();
 };
 
 export const createUserToken = (req, res, next) => {
