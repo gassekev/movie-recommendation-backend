@@ -1,8 +1,15 @@
 import { Router } from 'express';
 import httpStatus from 'http-status';
-import { validateLoginUserData, validateRegisterUserData,
-  findUser, validateUserPassword, createUserToken, hashUserPassword,
-  createUser, validateUserToken, revokeUserToken } from '../middleware/auth';
+import {
+  validateLoginUserData,
+  validateRegisterUserData,
+  findUser,
+  validateUserPassword,
+  createUserToken,
+  hashUserPassword,
+  createUser,
+  validateUserToken,
+  revokeUserToken } from '../middleware/auth';
 
 const router = new Router();
 
