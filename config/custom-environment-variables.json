@@ -10,6 +10,7 @@
     "password": "MONGO_ROOT_PASSWORD"
   },
   "redis": {
-    "port": "REDIS_PORT"
+    "port": "REDIS_PORT",
+    "password": "REDIS_PASSWORD"
   }
 }
