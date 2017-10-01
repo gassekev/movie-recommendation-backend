@@ -10,8 +10,6 @@ userSchema.statics.publicProjection = function publicProjection() {
   };
 };
 
-userSchema.statics.updateableProperties = () => (['seenMovies']);
-
 /**
  * Model for 'User' MongoDB collection
  */
