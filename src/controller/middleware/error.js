@@ -14,7 +14,7 @@ export default function (err, req, res, next) {
       res.status(httpStatus.BAD_REQUEST).json({ error: err.message });
       break;
     default:
-      res.sendStatus(httpStatus.BAD_REQUEST);
+      res.status(httpStatus.BAD_REQUEST).json({ error: httpStatus['400'] });
   }
 
   next(err);
