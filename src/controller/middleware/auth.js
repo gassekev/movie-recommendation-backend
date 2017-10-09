@@ -112,7 +112,7 @@ export const findUserByUsername = (req, res, next) => {
   User.findOne({ username }).exec()
     .then((user) => {
       if (!user) {
-        throw new AuthError('wrong username/email or password');
+        throw new AuthError('wrong username or password');
       }
 
       res.locals.user = user;
@@ -127,7 +127,7 @@ export const findUserByEmail = (req, res, next) => {
   User.findOne({ email }).exec()
     .then((user) => {
       if (!user) {
-        throw new AuthError('wrong username/email or password');
+        throw new AuthError('wrong email or password');
       }
 
       res.locals.user = user;
