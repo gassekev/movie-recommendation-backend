@@ -3,7 +3,6 @@ import config from 'config';
 import Joi from 'joi';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import ValidationError from '../../error/validation';
 import User from '../../data/model/user';
 import AuthError from '../../error/auth';
 import { generateRandomId } from '../../util';
@@ -24,7 +23,7 @@ const isRevokedCallback = (req, payload, done) => {
 const validateData = (data, schema, next) => {
   Joi.validate(data, schema)
     .then(() => next())
-    .catch(() => next(new ValidationError('validation of user data failed')));
+    .catch(err => next(err));
 };
 
 export const validateUserToken = jwtExpress({

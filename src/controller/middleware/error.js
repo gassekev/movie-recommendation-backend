@@ -8,7 +8,7 @@ export default function (err, req, res, next) {
       res.status(httpStatus.UNAUTHORIZED).json({ error: 'invalid token...' });
       break;
     case 'ValidationError':
-      res.status(httpStatus.BAD_REQUEST).json({ error: err.message });
+      res.status(httpStatus.BAD_REQUEST).json({ error: err.details[0].message });
       break;
     case 'AuthError':
       res.status(httpStatus.BAD_REQUEST).json({ error: err.message });
