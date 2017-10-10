@@ -26,6 +26,13 @@ const validateData = (data, schema, next) => {
     .catch(err => next(err));
 };
 
+const matchesField = field =>
+  Joi.any().valid(Joi.ref(field)).options({
+    language: {
+      any: { allowOnly: `must match "${field}"` },
+    },
+  });
+
 export const validateUserToken = jwtExpress({
   secret: config.get('jwt.secret'),
   resultProperty: 'locals.auth',
@@ -149,7 +156,7 @@ export const validateRegisterUserData = (req, res, next) => {
   const userRegistrationSchema = Joi.object().keys({
     username: Joi.string().required(),
     password: Joi.string().required(),
-    passwordConfirmation: Joi.string().valid(Joi.ref('password')).required(),
+    passwordConfirmation: matchesField('password').required(),
     email: Joi.string().email().required(),
   });
 
@@ -168,7 +175,7 @@ export const validateResetUserData = (req, res, next) => {
   const userResetSchema = Joi.object().keys({
     username: Joi.string().required(),
     password: Joi.string().required(),
-    passwordConfirmation: Joi.string().valid(Joi.ref('password')).required(),
+    passwordConfirmation: matchesField('password').required(),
   });
 
   validateData(req.body, userResetSchema, next);
