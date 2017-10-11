@@ -1,14 +1,15 @@
 import jwtExpress from 'express-jwt';
 import config from 'config';
-import Joi from 'joi';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import User from '../../data/model/user';
 import AuthError from '../../error/auth';
-import { generateRandomId, validateData, matchesField } from '../../util';
+import { generateRandomId } from '../../util';
 import redisClient from '../../data/redis';
-
-const minPasswordLength = 8;
+import { checkUsername,
+  checkPassword,
+  checkPasswordConfirmation,
+  checkEmail } from './validation';
 
 const isRevokedCallback = (req, payload, done) => {
   const tokenId = payload.jti;
@@ -52,7 +53,7 @@ export const createUserToken = (req, res, next) => {
 };
 
 export const validateUserPassword = (req, res, next) => {
-  const password = req.body.password;
+  const password = res.locals.validatedBody.password;
 
   bcrypt.compare(password, res.locals.user.passwordHash)
     .then((valid) => {
@@ -65,7 +66,7 @@ export const validateUserPassword = (req, res, next) => {
 };
 
 export const hashUserPassword = (req, res, next) => {
-  const password = req.body.password;
+  const password = res.locals.validatedBody.password;
 
   bcrypt.hash(password, config.get('bcrypt.saltRounds'))
     .then((passwordHash) => {
@@ -81,8 +82,8 @@ export const hashUserPassword = (req, res, next) => {
 
 export const createUser = (req, res, next) => {
   const user = {
-    username: req.body.username,
-    email: req.body.email,
+    username: res.locals.validatedBody.username,
+    email: res.locals.validatedBody.email,
     ...res.locals.user,
   };
 
@@ -103,7 +104,7 @@ export const saveUser = (req, res, next) => {
 };
 
 export const findUserByUsername = (req, res, next) => {
-  const username = req.body.username;
+  const username = res.locals.validatedBody.username;
 
   User.findOne({ username }).exec()
     .then((user) => {
@@ -132,43 +133,16 @@ export const findUserByEmail = (req, res, next) => {
     .catch(err => next(err));
 };
 
-export const validateLoginUserData = (req, res, next) => {
-  const userCredentialSchema = Joi.object().keys({
-    username: Joi.string().alphanum().required(),
-    password: Joi.string().required(),
-  });
+export const checkLoginUserData = [checkUsername, checkPassword];
 
-  validateData(req.body, userCredentialSchema, next);
-};
+export const checkRegisterUserData = [checkUsername,
+  checkEmail,
+  checkPassword,
+  checkPasswordConfirmation];
 
-export const validateRegisterUserData = (req, res, next) => {
-  const userRegistrationSchema = Joi.object().keys({
-    username: Joi.string().alphanum().required(),
-    password: Joi.string().min(minPasswordLength).required(),
-    passwordConfirmation: matchesField('password').required().strip(),
-    email: Joi.string().email().required(),
-  });
+export const checkResetEmail = [checkEmail];
 
-  validateData(req.body, userRegistrationSchema, next);
-};
-
-export const validateResetEmail = (req, res, next) => {
-  const emailResetSchema = Joi.object().keys({
-    email: Joi.string().email().required(),
-  });
-
-  validateData(req.body, emailResetSchema, next);
-};
-
-export const validateResetUserData = (req, res, next) => {
-  const userResetSchema = Joi.object().keys({
-    username: Joi.string().alphanum().required(),
-    password: Joi.string().min(minPasswordLength).required(),
-    passwordConfirmation: matchesField('password').required().strip(),
-  });
-
-  validateData(req.body, userResetSchema, next);
-};
+export const checkResetUserData = [checkUsername, checkPassword, checkPasswordConfirmation];
 
 export const validateUserResetToken = (req, res, next) => {
   const token = req.query.resetToken;

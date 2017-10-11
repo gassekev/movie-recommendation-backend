@@ -1,12 +1,12 @@
 import { Router } from 'express';
 import httpStatus from 'http-status';
 import {
-  validateLoginUserData,
-  validateRegisterUserData,
+  checkLoginUserData,
+  checkRegisterUserData,
   findUserByUsername,
   findUserByEmail,
-  validateResetEmail,
-  validateResetUserData,
+  checkResetEmail,
+  checkResetUserData,
   createUserResetToken,
   validateUserPassword,
   validateUserResetToken,
@@ -17,25 +17,46 @@ import {
   createUser,
   validateUserToken,
   revokeUserToken } from '../middleware/auth';
+import { checkValidationResult } from '../middleware/validation';
 
 const router = new Router();
 
-router.post('/login', validateLoginUserData, findUserByUsername, validateUserPassword,
-  createUserToken, unsetResetToken, saveUser, (req, res) =>
+router.post('/login',
+  ...checkLoginUserData,
+  checkValidationResult,
+  findUserByUsername,
+  validateUserPassword,
+  createUserToken,
+  unsetResetToken,
+  saveUser, (req, res) =>
     res.json({ token: res.locals.token }));
 
-router.post('/register', validateRegisterUserData, hashUserPassword, createUser,
-  (req, res) =>
+router.post('/register',
+  ...checkRegisterUserData,
+  checkValidationResult,
+  hashUserPassword,
+  createUser, (req, res) =>
     res.sendStatus(httpStatus.CREATED));
 
-router.post('/logout', validateUserToken, revokeUserToken, (req, res) =>
-  res.sendStatus(httpStatus.OK));
-
-router.post('/set-password', validateResetUserData, findUserByUsername, validateUserResetToken,
-  hashUserPassword, saveUser, (req, res) =>
+router.post('/logout',
+  validateUserToken,
+  revokeUserToken, (req, res) =>
     res.sendStatus(httpStatus.OK));
 
-router.post('/reset-password', validateResetEmail, findUserByEmail, createUserResetToken,
+router.post('/set-password',
+  ...checkResetUserData,
+  checkValidationResult,
+  findUserByUsername,
+  validateUserResetToken,
+  hashUserPassword,
+  saveUser, (req, res) =>
+    res.sendStatus(httpStatus.OK));
+
+router.post('/reset-password',
+  ...checkResetEmail,
+  checkValidationResult,
+  findUserByEmail,
+  createUserResetToken,
   saveUser, (req, res) =>
     res.sendStatus(httpStatus.OK));
 
