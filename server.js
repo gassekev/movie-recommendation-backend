@@ -1,12 +1,14 @@
 import express from 'express';
 import cors from 'cors';
 import config from 'config';
+import helmet from 'helmet';
 import { json as jsonBodyParser } from 'body-parser';
 import connectToDB from './src/data/db';
 import controller from './src/controller/';
 
 const app = express();
 
+app.use(helmet());
 app.use(cors());
 app.use(jsonBodyParser());
 
