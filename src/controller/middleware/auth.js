@@ -5,7 +5,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import User from '../../data/model/user';
 import AuthError from '../../error/auth';
-import { generateRandomId } from '../../util';
+import { generateRandomId, validateData, matchesField } from '../../util';
 import redisClient from '../../data/redis';
 
 const isRevokedCallback = (req, payload, done) => {
@@ -19,19 +19,6 @@ const isRevokedCallback = (req, payload, done) => {
     done(new Error('redis client not connected'));
   }
 };
-
-const validateData = (data, schema, next) => {
-  Joi.validate(data, schema)
-    .then(() => next())
-    .catch(err => next(err));
-};
-
-const matchesField = field =>
-  Joi.any().valid(Joi.ref(field)).options({
-    language: {
-      any: { allowOnly: `must match "${field}"` },
-    },
-  });
 
 export const validateUserToken = jwtExpress({
   secret: config.get('jwt.secret'),
