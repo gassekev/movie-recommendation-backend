@@ -8,6 +8,8 @@ import AuthError from '../../error/auth';
 import { generateRandomId, validateData, matchesField } from '../../util';
 import redisClient from '../../data/redis';
 
+const minPasswordLength = 8;
+
 const isRevokedCallback = (req, payload, done) => {
   const tokenId = payload.jti;
 
@@ -132,7 +134,7 @@ export const findUserByEmail = (req, res, next) => {
 
 export const validateLoginUserData = (req, res, next) => {
   const userCredentialSchema = Joi.object().keys({
-    username: Joi.string().required(),
+    username: Joi.string().alphanum().required(),
     password: Joi.string().required(),
   });
 
@@ -141,9 +143,9 @@ export const validateLoginUserData = (req, res, next) => {
 
 export const validateRegisterUserData = (req, res, next) => {
   const userRegistrationSchema = Joi.object().keys({
-    username: Joi.string().required(),
-    password: Joi.string().required(),
-    passwordConfirmation: matchesField('password').required(),
+    username: Joi.string().alphanum().required(),
+    password: Joi.string().min(minPasswordLength).required(),
+    passwordConfirmation: matchesField('password').required().strip(),
     email: Joi.string().email().required(),
   });
 
@@ -160,9 +162,9 @@ export const validateResetEmail = (req, res, next) => {
 
 export const validateResetUserData = (req, res, next) => {
   const userResetSchema = Joi.object().keys({
-    username: Joi.string().required(),
-    password: Joi.string().required(),
-    passwordConfirmation: matchesField('password').required(),
+    username: Joi.string().alphanum().required(),
+    password: Joi.string().min(minPasswordLength).required(),
+    passwordConfirmation: matchesField('password').required().strip(),
   });
 
   validateData(req.body, userResetSchema, next);
