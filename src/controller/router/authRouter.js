@@ -17,8 +17,8 @@ import {
   hashUserPassword,
   createUser,
   validateUserToken,
-  revokeUserToken } from '../middleware/auth';
-import { checkValidationResult } from '../middleware/validation';
+  revokeUserToken } from '../middleware/authMiddleware';
+import { checkValidationResult } from '../middleware/validationMiddleware';
 
 const router = new Router();
 

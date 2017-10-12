@@ -2,14 +2,14 @@ import jwtExpress from 'express-jwt';
 import config from 'config';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import User from '../../data/model/user';
-import AuthError from '../../error/auth';
+import User from '../../data/model/userModel';
+import AuthError from '../../error/authError';
 import { generateRandomId, smtpTransporter } from '../../util';
 import redisClient from '../../data/redis';
 import { checkUsername,
   checkPassword,
   checkPasswordConfirmation,
-  checkEmail } from './validation';
+  checkEmail } from './validationMiddleware';
 
 const isRevokedCallback = (req, payload, done) => {
   const tokenId = payload.jti;

@@ -1,6 +1,6 @@
 import { check, validationResult } from 'express-validator/check';
 import { matchedData } from 'express-validator/filter';
-import ValidationError from '../../error/validation';
+import ValidationError from '../../error/validationError';
 
 export const checkUsername =
   check('username', 'username must only contain alphanumeric characters')
