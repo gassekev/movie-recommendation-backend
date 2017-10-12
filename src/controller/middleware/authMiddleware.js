@@ -185,7 +185,7 @@ export const unsetResetToken = (req, res, next) => {
 export const sendResetEmail = (req, res, next) => {
   const user = res.locals.user;
   const resetToken = user.resetToken;
-  const resetUrl = `${config.get('frontend.url')}/set-new-password?resetToken=${resetToken}`;
+  const resetUrl = `${config.get('frontend.url')}/#/set-password?resetToken=${resetToken}`;
 
   const message = {
     from: 'Movie Recommendation',
