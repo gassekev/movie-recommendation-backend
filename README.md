@@ -6,7 +6,7 @@ To get the project running first it is required to have Docker (including docker
 `docker-compose up`
 
 ### Build
-`docker-compose build --no-cache`
+`docker-compose build --no-cache --force-rm `
 
 ### Down
 `docker-compose down`

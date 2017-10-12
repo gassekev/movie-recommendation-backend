@@ -2,6 +2,7 @@ import jwtExpress from 'express-jwt';
 import config from 'config';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import { uriInDoubleQuotedAttr } from 'xss-filters';
 import User from '../../data/model/userModel';
 import AuthError from '../../error/authError';
 import { generateRandomId, smtpTransporter } from '../../util';
@@ -184,13 +185,13 @@ export const unsetResetToken = (req, res, next) => {
 export const sendResetEmail = (req, res, next) => {
   const user = res.locals.user;
   const resetToken = user.resetToken;
+  const resetUrl = `${config.get('frontend.url')}/set-new-password?resetToken=${resetToken}`;
 
   const message = {
     from: 'Movie Recommendation',
     to: user.email,
     subject: 'Reset password',
-    html: `<a href="${config.get('frontend.url')}/set-new-password?resetToken=${resetToken}" >
-      Reset password</a>`,
+    html: `<a href="${uriInDoubleQuotedAttr(resetUrl)}">Reset password</a>`,
   };
 
   smtpTransporter.sendMail(message, (err) => {

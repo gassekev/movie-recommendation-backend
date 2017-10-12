@@ -19,10 +19,12 @@ import {
   validateUserToken,
   revokeUserToken } from '../middleware/authMiddleware';
 import { checkValidationResult } from '../middleware/validationMiddleware';
+import { sanitizeBodyUsername, sanitizeBodyEmail } from '../middleware/sanitizeMiddleware';
 
 const router = new Router();
 
 router.post('/login',
+  sanitizeBodyUsername,
   ...checkLoginUserData,
   checkValidationResult,
   findUserByUsername,
@@ -33,6 +35,8 @@ router.post('/login',
     res.json({ token: res.locals.token }));
 
 router.post('/register',
+  sanitizeBodyUsername,
+  sanitizeBodyEmail,
   ...checkRegisterUserData,
   checkValidationResult,
   hashUserPassword,
@@ -45,6 +49,7 @@ router.post('/logout',
     res.sendStatus(httpStatus.OK));
 
 router.post('/set-password',
+  sanitizeBodyUsername,
   ...checkResetUserData,
   checkValidationResult,
   findUserByUsername,
@@ -54,6 +59,7 @@ router.post('/set-password',
     res.sendStatus(httpStatus.OK));
 
 router.post('/reset-password',
+  sanitizeBodyEmail,
   ...checkResetEmail,
   checkValidationResult,
   findUserByEmail,

@@ -1,10 +1,20 @@
 import { Router } from 'express';
 import httpStatus from 'http-status';
 import User from '../../data/model/userModel';
+import { sanitizeParamUsername } from '../middleware/sanitizeMiddleware';
 
 const router = new Router();
 
+router.use((req, res, next) => {
+  console.log('peeeeeeenisss');
+  next();
+});
+
+router.use(sanitizeParamUsername);
+
 router.param('username', (req, res, next, username) => {
+  console.log('peeeeeeenisss222222');
+
   if (res.locals.auth.sub === username || res.locals.auth.isAdmin) {
     next();
   } else {
