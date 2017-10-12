@@ -1,11 +1,15 @@
 FROM node:7.9
 
-RUN mkdir -p /usr/src/app
-WORKDIR /usr/src/app
+ENV HOME=/usr/src/app
 
-COPY package.json /usr/src/app/
+RUN mkdir -p $HOME
+
+WORKDIR $HOME
+
+COPY package.json package-lock.json ./
 RUN npm cache clean && npm install
-COPY . /usr/src/app
+
+COPY . .
 
 ENTRYPOINT ["npm", "run"]
 CMD ["start"]

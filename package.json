@@ -5,6 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "babel-node server.js",
+    "watch": "nodemon --exec babel-node server.js",
     "lint": "./node_modules/.bin/eslint *.js"
   },
   "repository": {
@@ -43,6 +44,7 @@
     "eslint-config-airbnb": "^15.1.0",
     "eslint-plugin-import": "^2.7.0",
     "eslint-plugin-jsx-a11y": "^5.1.1",
-    "eslint-plugin-react": "^7.2.1"
+    "eslint-plugin-react": "^7.2.1",
+    "nodemon": "^1.12.1"
   }
 }

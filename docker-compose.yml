@@ -18,6 +18,7 @@ services:
     links:
       - mongo
       - redis
+    command: ["watch"]
   mongo:
     image: mongo:3.4
     ports:
