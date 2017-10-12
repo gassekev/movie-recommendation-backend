@@ -54,6 +54,7 @@ router.post('/set-password',
   checkValidationResult,
   findUserByUsername,
   validateUserResetToken,
+  unsetResetToken,
   hashUserPassword,
   saveUser, (req, res) =>
     res.sendStatus(httpStatus.OK));
