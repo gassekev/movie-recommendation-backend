@@ -12,6 +12,7 @@ import {
   validateUserResetToken,
   createUserToken,
   saveUser,
+  sendResetEmail,
   unsetResetToken,
   hashUserPassword,
   createUser,
@@ -57,6 +58,7 @@ router.post('/reset-password',
   checkValidationResult,
   findUserByEmail,
   createUserResetToken,
+  sendResetEmail,
   saveUser, (req, res) =>
     res.sendStatus(httpStatus.OK));
 

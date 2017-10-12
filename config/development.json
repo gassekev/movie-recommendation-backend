@@ -1,6 +1,5 @@
 {
   "jwt": {
-    "secret": "jwtsecret",
     "expiresIn": 3600
   },
   "bcrypt": {
@@ -12,16 +11,16 @@
   "db": {
     "name": "movie-rec",
     "port": 27017,
-    "host": "mongo",
-    "username": "admin",
-    "password": "password"
+    "host": "mongo"
   },
   "redis": {
     "port": 6379,
-    "host": "redis",
-    "password": "password"
+    "host": "redis"
   },
   "user": {
     "resetTokenExpiresIn": 3600
+  },
+  "frontend": {
+    "url": "http://localhost:3000"
   }
 }

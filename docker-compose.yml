@@ -3,13 +3,8 @@ version: '3'
 services:
   movie-rec:
     build: .
-    environment:
-      - NODE_ENV=development
-      - JWT_SECRET=jwtsecret
-      - PORT=3001
-      - MONGO_ROOT_USERNAME=admin
-      - MONGO_ROOT_PASSWORD=password
-      - REDIS_PASSWORD=password
+    env_file:
+      - .env
     ports:
       - "3001:3001"
     volumes:
