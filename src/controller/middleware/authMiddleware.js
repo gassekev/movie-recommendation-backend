@@ -194,11 +194,7 @@ export const sendResetEmail = (req, res, next) => {
     html: `<a href="${uriInDoubleQuotedAttr(resetUrl)}">Reset password</a>`,
   };
 
-  smtpTransporter.sendMail(message, (err) => {
-    if (err) {
-      return next(err);
-    }
+  smtpTransporter.sendMail(message);
 
-    return next();
-  });
+  return next();
 };
