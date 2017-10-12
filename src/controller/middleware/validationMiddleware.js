@@ -1,25 +1,44 @@
 import { check, validationResult } from 'express-validator/check';
 import { matchedData } from 'express-validator/filter';
 import ValidationError from '../../error/validationError';
+import User from '../../data/model/userModel';
 
 export const checkUsername =
-  check('username', 'username must only contain alphanumeric characters')
+  check('username', 'Username must only contain alphanumeric characters')
     .exists()
     .isAlphanumeric()
     .not()
     .isEmpty();
 
+export const checkUsernameUnique =
+  check('username')
+    .custom(value => User.findOne({ username: value }).exec().then((user) => {
+      if (user) {
+        throw new Error('Username is already in use');
+      }
+      return true;
+    }));
+
+export const checkEmailUnique =
+  check('email')
+    .custom(value => User.findOne({ email: value }).exec().then((user) => {
+      if (user) {
+        throw new Error('Email is already in use');
+      }
+      return true;
+    }));
+
 export const checkPassword =
   check('password')
-    .isLength({ min: 8 }).withMessage('password must be of minimum 8 characters length')
+    .isLength({ min: 8 }).withMessage('Password must be of minimum 8 characters length')
     .exists();
 
 export const checkPasswordConfirmation =
   check('passwordConfirmation')
     .exists()
-    .isLength({ min: 8 }).withMessage('password must be of minimum 8 characters length')
+    .isLength({ min: 8 }).withMessage('Password must be of minimum 8 characters length')
     .custom((value, { req }) => value === req.body.password)
-    .withMessage('"passwordConfirmation" must match "password"');
+    .withMessage('Password confirmation must match password');
 
 export const checkEmail =
   check('email')

@@ -9,9 +9,8 @@ import InternalError from '../../error/internalError';
 import { generateRandomId, smtpTransporter } from '../../util';
 import redisClient from '../../data/redis';
 import { checkUsername,
-  checkPassword,
-  checkPasswordConfirmation,
-  checkEmail } from './validationMiddleware';
+  checkPassword, checkPasswordConfirmation, checkEmail, checkEmailUnique,
+  checkUsernameUnique } from './validationMiddleware';
 
 const isRevokedCallback = (req, payload, done) => {
   const tokenId = payload.jti;
@@ -138,7 +137,9 @@ export const findUserByEmail = (req, res, next) => {
 export const checkLoginUserData = [checkUsername, checkPassword];
 
 export const checkRegisterUserData = [checkUsername,
+  checkUsernameUnique,
   checkEmail,
+  checkEmailUnique,
   checkPassword,
   checkPasswordConfirmation];
 
