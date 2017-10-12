@@ -12,8 +12,8 @@ export const checkUsername =
 
 export const checkUsernameUnique =
   check('username')
-    .custom(value => User.findOne({ username: value }).exec().then((user) => {
-      if (user) {
+    .custom(value => User.count({ username: value }).exec().then((count) => {
+      if (count > 0) {
         throw new Error('Username is already in use');
       }
       return true;
@@ -21,8 +21,8 @@ export const checkUsernameUnique =
 
 export const checkEmailUnique =
   check('email')
-    .custom(value => User.findOne({ email: value }).exec().then((user) => {
-      if (user) {
+    .custom(value => User.count({ email: value }).exec().then((count) => {
+      if (count > 0) {
         throw new Error('Email is already in use');
       }
       return true;
