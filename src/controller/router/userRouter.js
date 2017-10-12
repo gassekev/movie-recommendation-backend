@@ -5,10 +5,6 @@ import { sanitizeParamUsername } from '../middleware/sanitizeMiddleware';
 
 const router = new Router();
 
-router.use((req, res, next) => {
-  next();
-});
-
 router.use(sanitizeParamUsername);
 
 router.param('username', (req, res, next, username) => {
