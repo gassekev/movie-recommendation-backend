@@ -18,7 +18,7 @@
     "host": "redis"
   },
   "user": {
-    "resetTokenExpiresIn": 3600
+    "resetTokenExpiresIn": 86400
   },
   "frontend": {
     "url": "http://localhost:3000"

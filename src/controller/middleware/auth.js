@@ -1,7 +1,6 @@
 import jwtExpress from 'express-jwt';
 import config from 'config';
 import bcrypt from 'bcrypt';
-import nodemailer from 'nodemailer';
 import jwt from 'jsonwebtoken';
 import User from '../../data/model/user';
 import AuthError from '../../error/auth';
@@ -194,13 +193,10 @@ export const sendResetEmail = (req, res, next) => {
       Reset password</a>`,
   };
 
-  smtpTransporter.sendMail(message, (err, info) => {
+  smtpTransporter.sendMail(message, (err) => {
     if (err) {
       return next(err);
     }
-
-    console.log(`Message sent: ${info.messageId}`);
-    console.log(`Preview URL: ${nodemailer.getTestMessageUrl(info)}`);
 
     return next();
   });
