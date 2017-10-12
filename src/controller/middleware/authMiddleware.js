@@ -4,7 +4,8 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { uriInDoubleQuotedAttr } from 'xss-filters';
 import User from '../../data/model/userModel';
-import AuthError from '../../error/authError';
+import UnauthorizedError from '../../error/unauthorizedError';
+import InternalError from '../../error/internalError';
 import { generateRandomId, smtpTransporter } from '../../util';
 import redisClient from '../../data/redis';
 import { checkUsername,
@@ -20,7 +21,7 @@ const isRevokedCallback = (req, payload, done) => {
       done(null, !!result);
     });
   } else {
-    done(new Error('redis client not connected'));
+    done(new InternalError('redis client not connected'));
   }
 };
 
@@ -34,7 +35,7 @@ export const revokeUserToken = (req, res, next) => {
   const auth = res.locals.auth;
 
   if (!redisClient.connected) {
-    throw new Error('redis client not connected');
+    throw new InternalError('redis client not connected');
   }
 
   redisClient.set(auth.jti, '', 'EX', (auth.exp - auth.iat));
@@ -59,7 +60,7 @@ export const validateUserPassword = (req, res, next) => {
   bcrypt.compare(password, res.locals.user.passwordHash)
     .then((valid) => {
       if (valid === false) {
-        throw new AuthError('wrong username or password');
+        throw new UnauthorizedError('Wrong username or password');
       }
       return next();
     })
@@ -110,7 +111,7 @@ export const findUserByUsername = (req, res, next) => {
   User.findOne({ username }).exec()
     .then((user) => {
       if (!user) {
-        throw new AuthError('wrong username or password');
+        throw new UnauthorizedError('Wrong username or password');
       }
 
       res.locals.user = user;
@@ -125,7 +126,7 @@ export const findUserByEmail = (req, res, next) => {
   User.findOne({ email }).exec()
     .then((user) => {
       if (!user) {
-        throw new AuthError('wrong email or password');
+        throw new UnauthorizedError('Wrong email or password');
       }
 
       res.locals.user = user;
@@ -154,7 +155,7 @@ export const validateUserResetToken = (req, res, next) => {
     return next();
   }
 
-  throw new AuthError('reset token invalid or missing');
+  throw new UnauthorizedError('Reset token invalid or missing');
 };
 
 export const createUserResetToken = (req, res, next) => {

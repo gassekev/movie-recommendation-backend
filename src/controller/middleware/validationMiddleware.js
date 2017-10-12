@@ -40,7 +40,7 @@ export const checkValidationResult = (req, res, next) => {
     });
 
   if (!errors.isEmpty()) {
-    return next(new ValidationError(errors.array(), 'validation failed'));
+    return next(new ValidationError(errors.array(), 'Validation failed'));
   }
 
   res.locals.validatedBody = matchedData(req);
