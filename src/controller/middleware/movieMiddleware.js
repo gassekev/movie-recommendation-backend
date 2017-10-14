@@ -28,7 +28,7 @@ export const fetchMovies = (req, res, next) => {
 
 export const filterMovies = (req, res, next) => {
   const movies = res.locals.movies;
-  console.log(movies);
+
   User.findOne({ username: res.locals.auth.sub }).exec()
     .then((user) => {
       if (user) {
