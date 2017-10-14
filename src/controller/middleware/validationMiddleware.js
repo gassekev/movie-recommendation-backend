@@ -29,19 +29,18 @@ export const checkEmailUnique =
     }));
 
 export const checkPassword =
-  check('password')
-    .isLength({ min: 8 }).withMessage('Password must be of minimum 8 characters length')
-    .exists();
+  check('password', 'Password must be of minimum 8 characters length')
+    .exists()
+    .isLength({ min: 8 });
 
 export const checkPasswordConfirmation =
-  check('passwordConfirmation')
+  check('passwordConfirmation', 'Password confirmation must match password')
     .exists()
-    .isLength({ min: 8 }).withMessage('Password must be of minimum 8 characters length')
-    .custom((value, { req }) => value === req.body.password)
-    .withMessage('Password confirmation must match password');
+    .isLength({ min: 8 })
+    .custom((value, { req }) => value === req.body.password);
 
 export const checkEmail =
-  check('email')
+  check('email', 'Email must be a valid email address')
     .exists()
     .isEmail()
     .not()
