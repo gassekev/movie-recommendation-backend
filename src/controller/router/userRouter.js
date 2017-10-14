@@ -44,15 +44,21 @@ router.get('/:username', (req, res, next) => {
 });
 
 router.delete('/:username', (req, res, next) => {
-  User.deleteOne({ username: req.params.username }).exec()
-    .then(({ deletedCount }) => {
-      if (deletedCount === 1) {
-        res.sendStatus(httpStatus.OK);
-      } else {
-        res.sendStatus(httpStatus.NOT_FOUND);
-      }
-    })
-    .catch(err => next(err));
+  const auth = res.locals.auth;
+
+  if (!(auth.isAdmin && req.params.username === auth.sub)) {
+    User.deleteOne({ username: req.params.username }).exec()
+      .then(({ deletedCount }) => {
+        if (deletedCount === 1) {
+          res.sendStatus(httpStatus.OK);
+        } else {
+          res.sendStatus(httpStatus.NOT_FOUND);
+        }
+      })
+      .catch(err => next(err));
+  } else {
+    res.sendStatus(httpStatus.FORBIDDEN);
+  }
 });
 
 router.put('/:username/watched', (req, res, next) => {
