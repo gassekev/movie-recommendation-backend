@@ -45,8 +45,8 @@ router.get('/:username', (req, res, next) => {
 
 router.delete('/:username', (req, res, next) => {
   User.deleteOne({ username: req.params.username }).exec()
-    .then(({ nRemoved }) => {
-      if (nRemoved === 1) {
+    .then(({ deletedCount }) => {
+      if (deletedCount === 1) {
         res.sendStatus(httpStatus.OK);
       } else {
         res.sendStatus(httpStatus.NOT_FOUND);
