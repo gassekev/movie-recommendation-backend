@@ -68,3 +68,6 @@ typings/
 
 # environment var file
 .env
+
+# macos
+.DS_Store
