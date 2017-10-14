@@ -1,6 +1,6 @@
 {
   "jwt": {
-    "expiresIn": 3600
+    "expiresIn": 86400
   },
   "bcrypt": {
     "saltRounds": 10
