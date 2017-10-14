@@ -1,9 +1,13 @@
 import { Router } from 'express';
+import httpStatus from 'http-status';
+import { fetchMovies, filterMovies } from '../middleware/movieMiddleware';
 
 const router = new Router();
 
-router.get('/', (req, res) => {
-  res.json(['Test Movie 1', 'Test Movie 2']);
+router.get('/', fetchMovies, filterMovies, (req, res) => {
+  const movies = res.locals.movies.map(({ id, title, overview }) => ({ id, title, overview }));
+
+  res.status(httpStatus.OK).json(movies);
 });
 
 export default router;

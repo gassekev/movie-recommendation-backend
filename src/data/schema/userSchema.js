@@ -23,7 +23,7 @@ export default mongoose.Schema({
     required: [true, 'passwordHash is required'],
   },
   seenMovies: {
-    type: [String],
+    type: [Number],
     default: [],
   },
   isAdmin: {

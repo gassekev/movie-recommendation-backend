@@ -23,5 +23,9 @@
   },
   "frontend": {
     "url": "FRONTEND_URL"
+  },
+  "tmdb": {
+    "apiKey": "TMDB_API_KEY",
+    "url": "TMDB_URL"
   }
 }

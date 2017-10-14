@@ -31,19 +31,6 @@ router.get('/', (req, res, next) => {
   }
 });
 
-router.get('/:username/recommendations', (req, res, next) => {
-  User.findOne({ username: req.params.username }).exec()
-    .then((user) => {
-      if (user) {
-        // TODO: call web service with last added movie
-        res.json([]);
-      } else {
-        res.sendStatus(httpStatus.NOT_FOUND);
-      }
-    })
-    .catch(err => next(err));
-});
-
 router.get('/:username', (req, res, next) => {
   User.findOne({ username: req.params.username }).select(User.publicProjection()).exec()
     .then((user) => {
