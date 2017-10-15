@@ -13,5 +13,4 @@ COPY . .
 
 USER node
 
-ENTRYPOINT ["npm", "run"]
-CMD ["start"]
+CMD ["npm", "run", "start"]

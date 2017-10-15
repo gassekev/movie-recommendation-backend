@@ -13,7 +13,7 @@ services:
     links:
       - mongo
       - redis
-    command: ["watch"]
+    command: ["npm", "run", "watch"]
   mongo:
     image: mongo:3.4
     ports:
