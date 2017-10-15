@@ -7,10 +7,13 @@
   },
   "db": {
     "username": "MONGO_ROOT_USERNAME",
-    "password": "MONGO_ROOT_PASSWORD"
+    "password": "MONGO_ROOT_PASSWORD",
+    "host": "MONGO_HOST",
+    "port": "MONGO_PORT"
   },
   "redis": {
     "port": "REDIS_PORT",
+    "host": "REDIS_HOST",
     "password": "REDIS_PASSWORD"
   },
   "smtp": {
