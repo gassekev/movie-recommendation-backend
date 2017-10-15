@@ -9,7 +9,7 @@
     "port": 3000
   },
   "db": {
-    "name": "movie-rec",
+    "name": "movie-rec-dev",
     "port": 27017,
     "host": "mongo"
   },

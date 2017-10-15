@@ -1,0 +1,14 @@
+{
+  "jwt": {
+    "expiresIn": 86400
+  },
+  "bcrypt": {
+    "saltRounds": 10
+  },
+  "db": {
+    "name": "movie-rec-prod",
+  },
+  "user": {
+    "resetTokenExpiresIn": 86400000
+  }
+}
