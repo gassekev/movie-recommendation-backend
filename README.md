@@ -25,4 +25,4 @@ We follow the Airbnb javascript style guidelines: https://github.com/airbnb/java
 
 ## Configuration
 Configuration is managed with the https://www.npmjs.com/package/config package and all security relevant
-configuration is only set via Environment variables mapped in `config/custom-environment-variables.json`
+configuration is only set via Environment variables mapped in `config/custom-environment-variables.json`.
