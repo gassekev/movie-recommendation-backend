@@ -6,7 +6,7 @@
 import redis from 'redis';
 import config from 'config';
 
-const uri = `redis://${config.get('redis.host')}:${config.get('redis.port')}`;
+const uri = config.get('redis.uri');
 
 const options = {
   password: config.get('redis.password'),

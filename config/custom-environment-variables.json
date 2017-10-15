@@ -5,17 +5,11 @@
   "http": {
     "port": "PORT"
   },
-  "db": {
-    "username": "MONGO_ROOT_USERNAME",
-    "password": "MONGO_ROOT_PASSWORD",
-    "host": "MONGO_HOST",
-    "port": "MONGO_PORT",
-    "name": "MONGO_NAME"
+  "mongo": {
+    "uri": "MONGODB_URI"
   },
   "redis": {
-    "port": "REDIS_PORT",
-    "host": "REDIS_HOST",
-    "password": "REDIS_PASSWORD"
+    "uri": "REDIS_URI"
   },
   "smtp": {
     "host": "SMTP_HOST",

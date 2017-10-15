@@ -6,7 +6,7 @@
 import mongoose from 'mongoose';
 import config from 'config';
 
-const uri = `mongodb://${config.get('db.host')}:${config.get('db.port')}/${config.get('db.name')}`;
+const uri = config.get('mongo.uri');
 
 mongoose.Promise = Promise;
 

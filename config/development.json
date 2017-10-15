@@ -8,14 +8,11 @@
   "http": {
     "port": 3000
   },
-  "db": {
-    "name": "movie-rec-dev",
-    "port": 27017,
-    "host": "mongo"
+  "mongo": {
+    "uri": "mongo://admin:password@mongo:27017/movie-rec-dev"
   },
   "redis": {
-    "port": 6379,
-    "host": "redis"
+    "uri": "redis://password@redis:6379"
   },
   "user": {
     "resetTokenExpiresIn": 86400000
