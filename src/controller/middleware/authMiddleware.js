@@ -74,7 +74,7 @@ export const validateUserPassword = (req, res, next) => {
     .catch(err => next(err));
 };
 
-/** Creats a hash out of the user password */
+/** Creates a hash from the user password */
 export const hashUserPassword = (req, res, next) => {
   const password = res.locals.validatedBody.password;
 
@@ -193,7 +193,7 @@ export const unsetResetToken = (req, res, next) => {
   return next();
 };
 
-/** Generates and sends a email to reset your passwort */
+/** Generates and sends a email to reset your password */
 export const sendResetEmail = (req, res, next) => {
   const user = res.locals.user;
   const resetToken = user.resetToken;

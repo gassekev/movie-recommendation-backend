@@ -55,7 +55,7 @@ export const checkValidationResult = (req, res, next) => {
   const errors = validationResult(req)
     .formatWith(({ param, location, msg, value }) => {
       if (param === 'password' || param === 'passwordConfirmation') {
-        // exclude password field value
+        // exclude password field values
         return { param, location, msg };
       }
 
