@@ -1,4 +1,4 @@
-FROM node:7.9
+FROM node:8.7
 
 ENV HOME=/usr/src/app
 
@@ -7,9 +7,11 @@ RUN mkdir -p $HOME
 WORKDIR $HOME
 
 COPY package.json package-lock.json ./
-RUN npm cache clean && npm install
+RUN npm install
 
 COPY . .
+
+USER node
 
 ENTRYPOINT ["npm", "run"]
 CMD ["start"]

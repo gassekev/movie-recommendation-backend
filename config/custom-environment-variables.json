@@ -9,7 +9,8 @@
     "username": "MONGO_ROOT_USERNAME",
     "password": "MONGO_ROOT_PASSWORD",
     "host": "MONGO_HOST",
-    "port": "MONGO_PORT"
+    "port": "MONGO_PORT",
+    "name": "MONGO_NAME"
   },
   "redis": {
     "port": "REDIS_PORT",
