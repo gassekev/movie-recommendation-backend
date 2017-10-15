@@ -1,3 +1,8 @@
+/**
+ * @summary   Middleware that handles the errors and generates error proper massages
+ * @author    Kevin Gasser, Simon Müller, Tobias Huonder
+*/
+
 import httpStatus from 'http-status';
 
 export default function (err, req, res, next) {

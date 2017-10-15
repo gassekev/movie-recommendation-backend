@@ -1,3 +1,8 @@
+/**
+ * @summary   Middleware that handles the authentication
+ * @author    Kevin Gasser, Simon Müller, Tobias Huonder
+*/
+
 import jwtExpress from 'express-jwt';
 import config from 'config';
 import bcrypt from 'bcrypt';

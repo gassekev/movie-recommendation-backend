@@ -1,3 +1,8 @@
+/**
+ * @summary   Utility functions
+ * @author    Kevin Gasser, Simon Müller, Tobias Huonder
+*/
+
 import crypto from 'crypto';
 import config from 'config';
 import nodemailer from 'nodemailer';

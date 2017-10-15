@@ -1,3 +1,8 @@
+/**
+ * @summary   Create redis client
+ * @author    Kevin Gasser, Simon Müller, Tobias Huonder
+*/
+
 import redis from 'redis';
 import config from 'config';
 

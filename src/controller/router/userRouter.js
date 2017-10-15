@@ -1,3 +1,8 @@
+/**
+ * @summary   Router for the users
+ * @author    Kevin Gasser, Simon Müller, Tobias Huonder
+*/
+
 import { Router } from 'express';
 import httpStatus from 'http-status';
 import User from '../../data/model/userModel';

@@ -1,3 +1,8 @@
+/**
+ * @summary   Middleware that does the sanitization
+ * @author    Kevin Gasser, Simon Müller, Tobias Huonder
+*/
+
 import { sanitizeBody, sanitizeParam } from 'express-validator/filter';
 
 const curlyBraces = '{}';

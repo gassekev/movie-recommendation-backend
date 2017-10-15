@@ -1,3 +1,8 @@
+/**
+ * @summary   Middleware that handles the validation
+ * @author    Kevin Gasser, Simon Müller, Tobias Huonder
+*/
+
 import { check, validationResult } from 'express-validator/check';
 import { matchedData } from 'express-validator/filter';
 import ValidationError from '../../error/validationError';

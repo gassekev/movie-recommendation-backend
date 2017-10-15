@@ -1,3 +1,8 @@
+/**
+ * @summary   Creats connection to the database
+ * @author    Kevin Gasser, Simon Müller, Tobias Huonder
+*/
+
 import mongoose from 'mongoose';
 import config from 'config';
 

@@ -1,3 +1,8 @@
+/**
+ * @summary   Middleware that handles the movie requests
+ * @author    Kevin Gasser, Simon Müller, Tobias Huonder
+*/
+
 import config from 'config';
 import httpStatus from 'http-status';
 import fetch from 'isomorphic-fetch';

@@ -1,3 +1,8 @@
+/**
+ * @summary   Appends the specific routers to their path and adds errorhandling
+ * @author    Kevin Gasser, Simon Müller, Tobias Huonder
+*/
+
 import { Router } from 'express';
 import userRouter from './router/userRouter';
 import movieRouter from './router/movieRouter';

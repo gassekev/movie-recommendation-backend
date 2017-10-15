@@ -1,3 +1,8 @@
+/**
+ * @summary   Defines the model for the user
+ * @author    Kevin Gasser, Simon Müller, Tobias Huonder
+*/
+
 import mongoose from 'mongoose';
 import userSchema from '../schema/userSchema';
 

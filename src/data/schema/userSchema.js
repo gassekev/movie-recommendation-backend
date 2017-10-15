@@ -1,3 +1,8 @@
+/**
+ * @summary   Defines the schema for the user
+ * @author    Kevin Gasser, Simon Müller, Tobias Huonder
+*/
+
 import mongoose from 'mongoose';
 
 /**

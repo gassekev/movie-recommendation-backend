@@ -1,3 +1,8 @@
+/**
+ * @summary   Defines the validation error
+ * @author    Kevin Gasser, Simon Müller, Tobias Huonder
+*/
+
 export default class ValidationError extends Error {
   constructor(errors, ...args) {
     super(...args);

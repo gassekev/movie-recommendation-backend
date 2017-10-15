@@ -1,3 +1,8 @@
+/**
+ * @summary   Router for the movies
+ * @author    Kevin Gasser, Simon Müller, Tobias Huonder
+*/
+
 import { Router } from 'express';
 import httpStatus from 'http-status';
 import { fetchMovies, filterMovies } from '../middleware/movieMiddleware';
