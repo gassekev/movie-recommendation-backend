@@ -1,3 +1,8 @@
+/**
+ * @summary   Creats a express server and defines middleware
+ * @author    Kevin Gasser, Simon Müller, Tobias Huonder
+*/
+
 import express from 'express';
 import cors from 'cors';
 import config from 'config';
