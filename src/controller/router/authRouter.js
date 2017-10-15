@@ -1,5 +1,5 @@
 /**
- * @summary   Router for the authentication
+ * @summary   Router for the authentication. Adds auth middleware in correct order
  * @author    Kevin Gasser, Simon Müller, Tobias Huonder
 */
 

@@ -1,5 +1,5 @@
 /**
- * @summary   Router for the users
+ * @summary   Router for managing the users
  * @author    Kevin Gasser, Simon Müller, Tobias Huonder
 */
 

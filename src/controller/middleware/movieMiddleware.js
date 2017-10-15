@@ -1,5 +1,5 @@
 /**
- * @summary   Middleware that handles the movie requests
+ * @summary   Middleware for the movie route
  * @author    Kevin Gasser, Simon Müller, Tobias Huonder
 */
 

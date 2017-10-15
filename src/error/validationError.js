@@ -1,5 +1,5 @@
 /**
- * @summary   Defines the validation error
+ * @summary   Defines a validation error
  * @author    Kevin Gasser, Simon Müller, Tobias Huonder
 */
 

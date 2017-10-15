@@ -1,5 +1,5 @@
 /**
- * @summary   Middleware that does the sanitization
+ * @summary   Middleware that does the sanitation
  * @author    Kevin Gasser, Simon Müller, Tobias Huonder
 */
 

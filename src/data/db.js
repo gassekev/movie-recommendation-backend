@@ -1,5 +1,5 @@
 /**
- * @summary   Creats connection to the database
+ * @summary   Creates and handles connection to the database
  * @author    Kevin Gasser, Simon Müller, Tobias Huonder
 */
 

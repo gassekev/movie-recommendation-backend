@@ -1,5 +1,5 @@
 /**
- * @summary   Middleware that handles the errors and generates error proper massages
+ * @summary   Middleware that handles the errors and generates proper error messages
  * @author    Kevin Gasser, Simon Müller, Tobias Huonder
 */
 
