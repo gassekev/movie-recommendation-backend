@@ -1,6 +1,6 @@
 {
   "name": "movie-recommendation-backend",
-  "version": "1.1.0",
+  "version": "2.0.0",
   "description": "",
   "main": "server.js",
   "scripts": {
@@ -15,7 +15,7 @@
   "keywords": [
     "npm"
   ],
-  "author": "cias",
+  "author": "Kevin Gasser, Tobias Huonder, Simon Mueller",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/gassekev/movie-recommendation-backend/issues"
