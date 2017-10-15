@@ -8,11 +8,7 @@ import config from 'config';
 
 const uri = config.get('redis.uri');
 
-const options = {
-  password: config.get('redis.password'),
-};
-
-const client = redis.createClient(uri, options);
+const client = redis.createClient(uri);
 
 client.on('error', (err) => {
   console.log(`redis connection error: ${err}`);

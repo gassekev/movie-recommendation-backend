@@ -11,13 +11,8 @@ const uri = config.get('mongo.uri');
 mongoose.Promise = Promise;
 
 const options = {
-  user: config.get('db.username'),
-  pass: config.get('db.password'),
   promiseLibrary: Promise,
   useMongoClient: true,
-  auth: {
-    authdb: 'admin',
-  },
 };
 
 const connection = mongoose.connection;
