@@ -29,6 +29,7 @@ const isRevokedCallback = (req, payload, done) => {
   }
 };
 
+/** Validates the user token */
 export const validateUserToken = jwtExpress({
   secret: config.get('jwt.secret'),
   resultProperty: 'locals.auth',
@@ -46,6 +47,7 @@ export const revokeUserToken = (req, res, next) => {
   return next();
 };
 
+/** Creats the user token */
 export const createUserToken = (req, res, next) => {
   const user = res.locals.user;
   const jwtOptions = {
@@ -58,6 +60,7 @@ export const createUserToken = (req, res, next) => {
   return next();
 };
 
+/** Validates the user password with the compare function from bcrypt */
 export const validateUserPassword = (req, res, next) => {
   const password = res.locals.validatedBody.password;
 
@@ -71,6 +74,7 @@ export const validateUserPassword = (req, res, next) => {
     .catch(err => next(err));
 };
 
+/** Creats a hash out of the user password */
 export const hashUserPassword = (req, res, next) => {
   const password = res.locals.validatedBody.password;
 
@@ -189,6 +193,7 @@ export const unsetResetToken = (req, res, next) => {
   return next();
 };
 
+/** Generates and sends a email to reset your passwort */
 export const sendResetEmail = (req, res, next) => {
   const user = res.locals.user;
   const resetToken = user.resetToken;
