@@ -26,3 +26,6 @@ We follow the Airbnb javascript style guidelines: https://github.com/airbnb/java
 ## Configuration
 Configuration is managed with the https://www.npmjs.com/package/config package and all security relevant
 configuration is only set via Environment variables mapped in `config/custom-environment-variables.json`.
+
+## Docstyle
+We use JSDoc (http://usejsdoc.org) to document code. Preferably no inline comments should be necessary. Docstrings should only be added if they add information and not just to include them.
